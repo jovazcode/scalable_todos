@@ -1,6 +1,6 @@
 # scalable_todos
 
-A new Flutter project to showcase a clear and scalable project structure.
+Showcasing a Scalable "CLEAN-Layered & Feature-Sliced" Flutter App.
 
 ## Getting Started
 
