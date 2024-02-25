@@ -1,0 +1,36 @@
+name: scalable_todos
+description: Showcasing a Scalable "CLEAN-Layered & Feature-Sliced" Flutter App.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.2.3 <4.0.0"
+
+dependencies:
+  bloc: ^8.1.3
+  clean_foundations:
+    path: packages/clean_foundations
+  equatable: ^2.0.5
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.4
+  flutter_localizations:
+    sdk: flutter
+  get_it: ^7.6.6
+  go_router: ^13.1.0
+  intl: ^0.18.0
+  local_storage_todos_api:
+    path: packages/local_storage_todos_api
+  todos_api:
+    path: packages/todos_api
+  todos_data:
+    path: packages/todos_data
+  todos_domain:
+    path: packages/todos_domain
+
+dev_dependencies:
+  very_good_analysis: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true

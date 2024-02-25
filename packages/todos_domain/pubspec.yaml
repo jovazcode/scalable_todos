@@ -1,0 +1,14 @@
+name: todos_domain
+description: Todos domain layer.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  clean_foundations:
+    path: ../clean_foundations
+
+dev_dependencies:
+  very_good_analysis: ^5.1.0

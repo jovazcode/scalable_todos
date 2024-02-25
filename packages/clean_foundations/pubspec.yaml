@@ -1,0 +1,17 @@
+name: clean_foundations
+description: Foundations for a CLEAN architecture.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  collection: ^1.18.0
+  http: ^1.1.2
+  meta: ^1.10.0
+  rxdart: ^0.27.7
+  uuid: ^4.2.0
+
+dev_dependencies:
+  very_good_analysis: ^5.1.0

@@ -1,0 +1,19 @@
+name: todos_data
+description: Todos data layer.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.2.3
+
+dependencies:
+  clean_foundations:
+    path: ../clean_foundations
+  todos_api:
+    path: ../todos_api
+  todos_domain:
+    path: ../todos_domain
+  uuid: ^4.2.0
+
+dev_dependencies:
+  very_good_analysis: ^5.1.0
