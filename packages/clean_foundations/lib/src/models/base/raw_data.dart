@@ -19,7 +19,7 @@ class RawData {
   String toJson() => json.encode(_data);
 
   /// Returns data as a map.
-  JSONDataMap get toMap => {}..addAll(_data);
+  JSONDataMap get toMap => const {}..addAll(_data);
 
   /// Get value
   T? get<T>(String key) => _data[key] as T?;
