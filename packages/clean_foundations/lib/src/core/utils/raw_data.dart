@@ -1,6 +1,13 @@
 // ignore_for_file: parameter_assignments
 
-part of 'base.dart';
+import 'dart:convert';
+
+import 'package:clean_foundations/clean_foundations.dart';
+import 'package:clean_foundations/src/models/data_filter.dart';
+
+import 'package:collection/collection.dart';
+
+import 'package:meta/meta.dart';
 
 const DeepCollectionEquality _equality = DeepCollectionEquality();
 
@@ -19,7 +26,7 @@ class RawData {
   String toJson() => json.encode(_data);
 
   /// Returns data as a map.
-  JSONDataMap get toMap => const {}..addAll(_data);
+  JSONDataMap get toMap => {}..addAll(_data);
 
   /// Get value
   T? get<T>(String key) => _data[key] as T?;
@@ -34,14 +41,8 @@ class RawData {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! Model) return false;
+    if (other is! RawData) return false;
     if (runtimeType != other.runtimeType) return false;
-
-    if (this is Entity) {
-      if (other is! Entity) return false;
-      final thisEntity = this as Entity;
-      return _data[thisEntity.idProperty] == other._data[other.idProperty];
-    }
 
     return _equals(_data, other._data);
   }
@@ -76,10 +77,10 @@ class RawData {
   }
 
   @override
-  int get hashCode => runtimeType.hashCode ^ _mapDataToHashCode(_data.values);
+  int get hashCode => runtimeType.hashCode ^ hashData();
 
-  int _mapDataToHashCode(Iterable<dynamic>? props) =>
-      _finish(props == null ? 0 : props.fold(0, _combine));
+  /// Hash internal data
+  int hashData() => _mapDataToHashCode(_data.values.fold(0, _combine));
 
   /// Jenkins Hash Functions
   /// https://en.wikipedia.org/wiki/Jenkins_hash_function
@@ -102,7 +103,7 @@ class RawData {
     return hash ^ (hash >> 6);
   }
 
-  int _finish(int hash) {
+  int _mapDataToHashCode(int hash) {
     hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
     hash = hash ^ (hash >> 11);
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));

@@ -18,12 +18,7 @@ abstract class Entity<EntityId> extends Model {
   })  : internalId = id ??
             (identifier ?? Identifier<Entity<EntityId>>()).generate<EntityId>(),
         _id = id,
-        super.fromMap() {
-    _data[_internalIdKey] ??= this.id;
-  }
-
-  /// The internal identifier property key.
-  static const String _internalIdKey = '_id';
+        super.fromMap();
 
   /// Internal entity id
   final EntityId internalId;
@@ -34,4 +29,16 @@ abstract class Entity<EntityId> extends Model {
 
   /// The unique identifier property key of the entity.
   String get idProperty => 'id';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! Entity) return false;
+    if (runtimeType != other.runtimeType) return false;
+
+    return get<EntityId>(idProperty) == other.get<EntityId>(other.idProperty);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode ^ super.hashData();
 }

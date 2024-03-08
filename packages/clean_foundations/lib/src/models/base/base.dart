@@ -1,14 +1,8 @@
-import 'dart:convert';
-
 import 'package:clean_foundations/clean_foundations.dart';
-import 'package:clean_foundations/src/models/data_filter.dart';
-
-import 'package:collection/collection.dart';
 
 import 'package:meta/meta.dart';
 
 part 'entity.dart';
-part 'raw_data.dart';
 part 'value_object.dart';
 
 /// A [Model] is a representation of a business object.

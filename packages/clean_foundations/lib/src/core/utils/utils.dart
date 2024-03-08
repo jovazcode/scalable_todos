@@ -1,4 +1,3 @@
 export 'identifier.dart';
-
-/// JSON Data Map<String, dynamic>
-typedef JSONDataMap = Map<String, dynamic>;
+export 'json_datamap.dart';
+export 'raw_data.dart';
