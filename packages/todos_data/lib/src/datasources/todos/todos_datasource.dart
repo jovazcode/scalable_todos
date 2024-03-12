@@ -4,16 +4,16 @@ import 'package:todos_api/todos_api.dart';
 
 import 'package:todos_data/src/datasources/todos/todo_reader.dart';
 import 'package:todos_data/src/datasources/todos/todo_writer.dart';
-import 'package:todos_data/src/models/models.dart';
+import 'package:todos_data/src/dto/dto.dart';
 
 import 'package:todos_domain/todos_domain.dart';
 
 /// DataSource
-class TodosDataSource extends DataSource<Todo> {
+class TodosDataSource extends DataSource<Todo, TodoDTO> {
   TodosDataSource({required this.api})
       : super(
-          reader: TodoJsonDataReader(),
-          writer: TodoJsonDataWriter(),
+          reader: TodoDTOReader(),
+          writer: TodoDTOWriter(),
         );
 
   // [Todo]s API
@@ -22,19 +22,20 @@ class TodosDataSource extends DataSource<Todo> {
   // Current filters
   final List<DataFilter<dynamic>> _filters = [];
 
-  /// Create new [data] records.
+  /// Create new [records].
   @override
-  Future<ResultSet<TodoEntity>> create(
-    List<RawData> data,
+  Future<ResultSet<TodoDTO>> create(
+    List<Dto<Todo>> records,
   ) async {
+    final todos = records.cast<TodoDTO>();
     try {
-      final created = <TodoEntity>[];
-      for (final record in data) {
+      final created = <TodoDTO>[];
+      for (final record in todos) {
         assert(
-          record.get<String>(TodoKey.id.name) == null,
-          '''Record already created, id=${record.get<String>(TodoKey.id.name)}.''',
+          record.isPhantom,
+          '''Record is phantom, id=${record.id}.''',
         );
-        created.add(TodoEntity.fromMap(record.toMap));
+        created.add(record);
         await api.saveTodo(created.last);
       }
       return ResultSet(records: created);
@@ -45,13 +46,14 @@ class TodosDataSource extends DataSource<Todo> {
 
   /// Update given [records].
   @override
-  Future<ResultSet<TodoEntity>> update(List<Todo> records) async {
+  Future<ResultSet<TodoDTO>> update(List<Dto<Todo>> records) async {
+    final todos = records.cast<TodoDTO>();
     try {
-      final updated = <TodoEntity>[];
-      for (final record in records.cast<TodoEntity>()) {
+      final updated = <TodoDTO>[];
+      for (final record in todos) {
         assert(
-          record.get<String>(TodoKey.id.name) != null,
-          '''Invalid record, id=null ($record).''',
+          !record.isPhantom,
+          '''Invalid phantom record ($record).''',
         );
         updated.add(record);
         await api.saveTodo(record);
@@ -66,16 +68,17 @@ class TodosDataSource extends DataSource<Todo> {
 
   /// Delete given [records].
   @override
-  Future<ResultSet<TodoEntity>> delete(List<Todo> records) async {
+  Future<ResultSet<TodoDTO>> delete(List<Dto<Todo>> records) async {
+    final todos = records.cast<TodoDTO>();
     try {
-      final deleted = <TodoEntity>[];
-      for (final record in records.cast<TodoEntity>()) {
+      final deleted = <TodoDTO>[];
+      for (final record in todos) {
         assert(
-          record.get<String>(TodoKey.id.name) != null,
+          record.id != null,
           '''Invalid record, id=null ($record).''',
         );
         deleted.add(record);
-        await api.deleteTodo(record.get<String>(TodoKey.id.name)!);
+        await api.deleteTodo(record.id!);
       }
       return ResultSet(records: deleted);
     } on TodoNotFoundException catch (excp) {
@@ -87,7 +90,7 @@ class TodosDataSource extends DataSource<Todo> {
 
   /// Filter current 'records'.
   @override
-  Future<ResultSet<TodoEntity>> filter({
+  Future<ResultSet<TodoDTO>> filter({
     required List<DataFilter<dynamic>> filters,
   }) async {
     // Update current filters
@@ -103,9 +106,8 @@ class TodosDataSource extends DataSource<Todo> {
           );
 
     try {
-      final res = filteredDataList
-          .map((data) => TodoEntity.fromMap(data.toMap))
-          .toList();
+      final res =
+          filteredDataList.map((data) => TodoDTO.fromMap(data.toMap)).toList();
       return ResultSet(records: res);
     } on Exception catch (excp) {
       throw RemoteException(exception: excp);
@@ -114,7 +116,7 @@ class TodosDataSource extends DataSource<Todo> {
 
   /// Stream of records.
   @override
-  Stream<List<TodoEntity>> watch({
+  Stream<List<TodoDTO>> watch({
     Pagination? pagination,
     List<DataFilter<dynamic>>? filters,
     List<DataSorter<dynamic>>? sorters,
@@ -134,7 +136,7 @@ class TodosDataSource extends DataSource<Todo> {
               );
         try {
           final res = filteredDataList
-              .map((data) => TodoEntity.fromMap(data.toMap))
+              .map((data) => TodoDTO.fromMap(data.toMap))
               .toList();
           return res;
         } on Exception catch (excp) {

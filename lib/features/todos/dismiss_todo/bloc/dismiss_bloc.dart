@@ -1,4 +1,3 @@
-import 'package:clean_foundations/clean_foundations.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:scalable_todos/scalable_todos.dart';
@@ -31,12 +30,10 @@ class DismissBloc extends Bloc<DismissEvent, DismissState> {
   ) async {
     emit(state.copyWith(lastDismissedTodo: () => event.todo));
     await _todosRepository.create([
-      RawData.fromMap(
-        data: {
-          TodoKey.title.name: event.todo.title,
-          TodoKey.description.name: event.todo.description,
-          TodoKey.completed.name: event.todo.isCompleted,
-        },
+      Todo(
+        title: event.todo.title,
+        description: event.todo.description,
+        isCompleted: event.todo.isCompleted,
       ),
     ]);
   }

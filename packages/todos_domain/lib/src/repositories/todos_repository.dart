@@ -8,7 +8,7 @@ abstract class TodosRepository extends Repository<Todo>
         CreateRecords<Todo>,
         UpdateRecords<Todo>,
         DeleteRecords<Todo>,
-        StreamRecords<Todo> {
+        WatchRecords<Todo> {
   /// Repository
   TodosRepository({required super.dataSource});
 

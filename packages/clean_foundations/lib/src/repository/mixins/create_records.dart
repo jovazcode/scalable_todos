@@ -1,14 +1,14 @@
 import 'package:clean_foundations/clean_foundations.dart';
 
 /// Repository can Create Records
-mixin CreateRecords<ModelT extends Object> on Repository<ModelT> {
+mixin CreateRecords<M extends Model> on Repository<M> {
   /// Create new records from [data].
-  Future<RepositoryResponse<ResultSet<ModelT>>> create(
-    List<RawData> data,
+  Future<RepositoryResponse<ResultSet<M>>> create(
+    List<M> data,
   ) async {
     try {
-      final res = await dataSource.create(data);
-      return RepositorySuccess(res);
+      final res = await dataSource.create(data.map(fromDomain).toList());
+      return RepositorySuccess(res.convert(toDomain));
     } on DataSourceException catch (e) {
       return switch (e) {
         DataException() => DataFailure(message: e.toString()),

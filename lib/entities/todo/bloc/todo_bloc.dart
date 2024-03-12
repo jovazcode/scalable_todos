@@ -42,7 +42,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     Emitter<TodoState> emit,
   ) async {
     await _todosRepository.update([
-      event.todo.copyWith({TodoKey.completed: event.value}),
+      event.todo.copyWith(isCompleted: event.value),
     ]);
   }
 

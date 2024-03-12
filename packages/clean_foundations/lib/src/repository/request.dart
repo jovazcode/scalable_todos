@@ -3,7 +3,7 @@ import 'package:clean_foundations/clean_foundations.dart';
 /// Repository Request
 class RepositoryRequest extends ValueObject {
   /// Create from data
-  RepositoryRequest(JSONDataMap data)
+  RepositoryRequest(DataMap data)
       : sync = data['sync'] as bool? ?? false,
         addRecords = data['addRecords'] as bool? ?? false,
         lastFetchTime = data['lastFetchTime'] as DateTime? ??

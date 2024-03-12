@@ -30,7 +30,7 @@ class _ListView extends StatelessWidget {
       listenWhen: (previous, current) =>
           previous.lastDismissedTodo != current.lastDismissedTodo &&
           current.lastDismissedTodo != null,
-      listener: (context, state) {
+      listener: (_, state) {
         final deletedTodo = state.lastDismissedTodo!;
         final messenger = ScaffoldMessenger.of(context);
         messenger

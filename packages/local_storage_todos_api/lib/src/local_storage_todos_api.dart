@@ -41,14 +41,12 @@ class LocalStorageTodosApi extends TodosApi {
 
   List<RawData> get _todos {
     final todosJson = _getValue(kTodosCollectionKey);
+
     if (todosJson != null) {
-      final todos = (json.decode(todosJson) as List).map(
-        (todoJson) {
-          final todoMap =
-              json.decode(todoJson as String) as Map<String, dynamic>;
-          return RawData.fromMap(data: todoMap);
-        },
-      ).toList();
+      final todos = (json.decode(todosJson) as List)
+          .cast<Map<String, dynamic>>()
+          .map((todoMap) => RawData.fromMap(data: todoMap))
+          .toList();
       return todos;
     } else {
       return const [];

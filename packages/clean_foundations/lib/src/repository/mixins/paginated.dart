@@ -1,7 +1,7 @@
 import 'package:clean_foundations/clean_foundations.dart';
 
 /// Paginated Repository
-mixin PaginatedRepository<ModelT extends Object> on Repository<ModelT> {
+mixin PaginatedRepository<M extends Model> on Repository<M> {
   Pagination? _pagination;
 
   /// Get current pagination infos

@@ -1,11 +1,11 @@
 import 'package:clean_foundations/clean_foundations.dart';
 
-import 'package:todos_data/src/models/models.dart';
+import 'package:todos_data/src/dto/dto.dart';
 
-/// Entity Reader
-class TodoJsonDataReader extends DataReader<TodoEntity> {
+/// DTO Reader
+class TodoDTOReader extends DataReader<TodoDTO> {
   @override
-  TodoEntity read(dynamic data) {
+  TodoDTO read(dynamic data) {
     if (data is! Map<String, dynamic>) {
       throw DataException(
         message:
@@ -14,7 +14,7 @@ class TodoJsonDataReader extends DataReader<TodoEntity> {
       );
     }
     try {
-      return TodoEntity.fromMap(data);
+      return TodoDTO.fromMap(data);
     } on Exception catch (e) {
       throw DataException(exception: e);
     }

@@ -1,14 +1,15 @@
-/// Stats Attributes
-enum StatsKey {
-  completedTodos,
-  activeTodos,
-}
+import 'package:clean_foundations/clean_foundations.dart';
 
 /// Stats (value object)
-abstract class Stats {
+class Stats extends Model {
+  Stats({
+    required this.completedTodos,
+    required this.activeTodos,
+  });
+
   /// The number of completed `todo`.
-  int get completedTodos;
+  final int completedTodos;
 
   /// The number of active `todo`.
-  int get activeTodos;
+  final int activeTodos;
 }

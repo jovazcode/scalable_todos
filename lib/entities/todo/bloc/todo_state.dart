@@ -23,6 +23,6 @@ final class TodoState extends Equatable {
   @override
   List<Object?> get props => [
         status,
-        todos.map((e) => e.toMap),
+        todos,
       ];
 }

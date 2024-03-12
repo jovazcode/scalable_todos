@@ -1,9 +1,9 @@
 import 'package:clean_foundations/clean_foundations.dart';
 
-import 'package:todos_data/src/models/models.dart';
+import 'package:todos_data/src/dto/dto.dart';
 
-/// Entity Writer
-class TodoJsonDataWriter extends DataWriter<TodoEntity> {
+/// DTO Writer
+class TodoDTOWriter extends DataWriter<TodoDTO> {
   @override
-  dynamic write(TodoEntity record) => record.toMap;
+  dynamic write(TodoDTO record) => record.toMap;
 }

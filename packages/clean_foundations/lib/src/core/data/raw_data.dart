@@ -1,9 +1,6 @@
 // ignore_for_file: parameter_assignments
 
-import 'dart:convert';
-
 import 'package:clean_foundations/clean_foundations.dart';
-import 'package:clean_foundations/src/models/data_filter.dart';
 
 import 'package:collection/collection.dart';
 
@@ -14,25 +11,30 @@ const DeepCollectionEquality _equality = DeepCollectionEquality();
 /// Raw Internal Data
 @immutable
 class RawData {
-  /// A Raw DataMap Object
+  /// A Raw DataMap Object from Map
   const RawData.fromMap({
-    required JSONDataMap data,
+    required DataMap data,
+  }) : _data = data;
+
+  /// A Raw DataMap Object from Json (needed for Json Serialization)
+  const RawData.fromJson({
+    required DataMap data,
   }) : _data = data;
 
   /// Internal raw data
-  final JSONDataMap _data;
-
-  /// To json
-  String toJson() => json.encode(_data);
+  final DataMap _data;
 
   /// Returns data as a map.
-  JSONDataMap get toMap => {}..addAll(_data);
+  DataMap get toMap => {}..addAll(_data);
+
+  /// Returns data as json map (needed for Json Serialization)
+  DataMap toJson() => toMap;
 
   /// Get value
   T? get<T>(String key) => _data[key] as T?;
 
   /// Returns a copy of this Raw DataMap with the given values updated.
-  RawData mergeWith(JSONDataMap dataMap) => RawData.fromMap(
+  RawData mergeWith(DataMap dataMap) => RawData.fromMap(
         data: {}
           ..addAll(_data)
           ..addAll(dataMap),
@@ -47,7 +49,7 @@ class RawData {
     return _equals(_data, other._data);
   }
 
-  bool _equals(JSONDataMap? data1, JSONDataMap? data2) {
+  bool _equals(DataMap? data1, DataMap? data2) {
     final list1 = data1?.entries.toList();
     final list2 = data2?.entries.toList();
     if (identical(list1, list2)) return true;

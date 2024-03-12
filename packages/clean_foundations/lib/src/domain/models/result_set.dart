@@ -24,7 +24,7 @@ class ResultSet<T> extends ValueObject {
         });
 
   /// ResultSet
-  ResultSet.fromMap(JSONDataMap data)
+  ResultSet.fromMap(DataMap data)
       : _count = data['count'] as int?,
         _total = data['total'] as int? ?? data['count'] as int?,
         records = data['records'] as List<T>? ?? [],
@@ -71,4 +71,16 @@ class ResultSet<T> extends ValueObject {
 
   /// The error code that was read in from the [DataSource]
   final String? code;
+
+  /// Convert to another records type
+  ResultSet<R> convert<R>(R Function(T) converter) => ResultSet(
+        count: count,
+        total: total,
+        records: records.map(converter).toList(),
+        record: record != null ? converter(record as T) : null,
+        timestamp: timestamp,
+        success: success,
+        message: message,
+        code: code,
+      );
 }

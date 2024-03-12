@@ -6,12 +6,18 @@ export 'request.dart';
 export 'response.dart';
 
 /// Repository Definition
-abstract class Repository<ModelT extends Object> {
+abstract class Repository<M extends Model> {
   /// Repository Definition
   Repository({
     required this.dataSource,
   });
 
   /// The data source
-  final DataSource<ModelT> dataSource;
+  final DataSource<M, Dto<M>> dataSource;
+
+  /// From domain
+  Dto<M> fromDomain(M model);
+
+  /// To domain
+  M toDomain(Dto<M> dto);
 }

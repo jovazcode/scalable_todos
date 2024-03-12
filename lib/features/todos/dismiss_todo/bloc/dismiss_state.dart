@@ -25,6 +25,6 @@ final class DismissState extends Equatable {
   @override
   List<Object?> get props => [
         status,
-        lastDismissedTodo?.toMap ?? {},
+        lastDismissedTodo ?? {},
       ];
 }

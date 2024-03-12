@@ -5,14 +5,14 @@ sealed class Pagination {
   const Pagination();
 
   /// From Map
-  factory Pagination.fromMap(JSONDataMap data) {
+  factory Pagination.fromMap(DataMap data) {
     return PagePagination._readPageSize(data, 'limit') != null
         ? Pagination._page(data)
         : Pagination._cursor();
   }
 
   /// Page-based pagination
-  factory Pagination._page(JSONDataMap data) => PagePagination(data);
+  factory Pagination._page(DataMap data) => PagePagination(data);
 
   /// Cursor-based pagination
   factory Pagination._cursor() => const CursorPagination();
@@ -27,12 +27,12 @@ sealed class Pagination {
 /// PagePagination
 final class PagePagination extends Pagination {
   /// PagePagination
-  PagePagination(JSONDataMap data)
+  PagePagination(DataMap data)
       : _start = _readStartIndex(data, 'start'),
         limit = _readPageSize(data, 'limit') ?? 25,
         _page = _readCurrentPage(data, 'page');
 
-  static int? _readStartIndex(JSONDataMap json, String key) {
+  static int? _readStartIndex(DataMap json, String key) {
     final expectedKey = ['start_index', 'position', 'offset'].firstWhere(
       (element) => json.containsKey(element),
       orElse: () => key,
@@ -40,7 +40,7 @@ final class PagePagination extends Pagination {
     return int.tryParse(json[expectedKey] as String);
   }
 
-  static int? _readCurrentPage(JSONDataMap json, String key) {
+  static int? _readCurrentPage(DataMap json, String key) {
     final expectedKey = ['current_page', 'currentPage'].firstWhere(
       (element) => json.containsKey(element),
       orElse: () => key,
@@ -48,7 +48,7 @@ final class PagePagination extends Pagination {
     return int.tryParse(json[expectedKey] as String);
   }
 
-  static int? _readPageSize(JSONDataMap json, String key) {
+  static int? _readPageSize(DataMap json, String key) {
     final expectedKey = ['page_size', 'per_page', 'max'].firstWhere(
       (element) => json.containsKey(element),
       orElse: () => key,

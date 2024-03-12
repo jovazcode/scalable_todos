@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:clean_foundations/clean_foundations.dart';
 
 /// Repository can Update Records
-mixin UpdateRecords<ModelT extends Object> on Repository<ModelT> {
+mixin UpdateRecords<M extends Model> on Repository<M> {
   /// Update given [records].
-  Future<RepositoryResponse<ResultSet<ModelT>>> update(
-    List<ModelT> records,
+  Future<RepositoryResponse<ResultSet<M>>> update(
+    List<M> records,
   ) async {
     try {
-      final res = await dataSource.update(records);
-      return RepositorySuccess(res);
+      final res = await dataSource.update(records.map(fromDomain).toList());
+      return RepositorySuccess(res.convert<M>(toDomain));
     } on DataSourceException catch (e) {
       return switch (e) {
         DataException() => DataFailure(message: e.toString()),

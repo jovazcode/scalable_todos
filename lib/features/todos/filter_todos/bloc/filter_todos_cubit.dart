@@ -18,7 +18,7 @@ class FilterTodosCubit extends Cubit<FilterTodosState> {
     if (filter != TodosFilter.all) {
       filters.add(
         DataFilter.equal(
-          TodoKey.completed.name,
+          'completed',
           [filter == TodosFilter.completedOnly],
         ),
       );

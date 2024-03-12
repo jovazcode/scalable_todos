@@ -42,11 +42,9 @@ class EditBloc extends Bloc<EditEvent, EditState> {
     Emitter<EditState> emit,
   ) async {
     switch (await _todosRepository.create([
-      RawData.fromMap(
-        data: {
-          TodoKey.title.name: event.title,
-          TodoKey.description.name: event.description,
-        },
+      Todo(
+        title: event.title,
+        description: event.description,
       ),
     ])) {
       case RepositorySuccess<ResultSet<Todo>>():
@@ -61,10 +59,10 @@ class EditBloc extends Bloc<EditEvent, EditState> {
     Emitter<EditState> emit,
   ) async {
     switch (await _todosRepository.update([
-      state.initialTodo!.copyWith({
-        TodoKey.title: event.title,
-        TodoKey.description: event.description,
-      }),
+      state.initialTodo!.copyWith(
+        title: event.title,
+        description: event.description,
+      ),
     ])) {
       case RepositorySuccess<ResultSet<Todo>>():
         emit(state.copyWith(status: EditStatus.success));

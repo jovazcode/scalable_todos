@@ -1,6 +1,8 @@
+import 'package:clean_foundations/clean_foundations.dart';
+
 /// Data Reader
 // ignore: one_member_abstracts
-abstract class DataReader<ModelT extends Object> {
+abstract class DataReader<T extends Dto> {
   /// The name of the property which contains the Array of row objects
   String? get rootProperty => null;
 
@@ -9,5 +11,5 @@ abstract class DataReader<ModelT extends Object> {
   String? get totalProperty => null;
 
   /// Create a record from raw data.
-  ModelT read(dynamic data);
+  T read(dynamic data);
 }

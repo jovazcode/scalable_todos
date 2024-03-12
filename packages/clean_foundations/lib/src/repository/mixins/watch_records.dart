@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:clean_foundations/clean_foundations.dart';
 
 /// Repository can Stream Records
-mixin StreamRecords<ModelT extends Object> on Repository<ModelT> {
+mixin WatchRecords<M extends Model> on Repository<M> {
   /// Filter the Stream of 'records'.
-  Future<RepositoryResponse<ResultSet<ModelT>>> filter({
+  Future<RepositoryResponse<ResultSet<M>>> filter({
     required List<DataFilter<dynamic>> filters,
   }) async {
     try {
       final res = await dataSource.filter(
         filters: filters,
       );
-      return RepositorySuccess(res);
+      return RepositorySuccess(res.convert<M>(toDomain));
     } on DataSourceException catch (e) {
       return switch (e) {
         DataException() => DataFailure(message: e.toString()),
@@ -27,7 +27,7 @@ mixin StreamRecords<ModelT extends Object> on Repository<ModelT> {
   }
 
   /// Stream of 'records'.
-  Stream<RepositoryResponse<List<ModelT>>> watch({
+  Stream<RepositoryResponse<List<M>>> watch({
     RepositoryRequest? request,
   }) async* {
     try {
@@ -37,7 +37,8 @@ mixin StreamRecords<ModelT extends Object> on Repository<ModelT> {
         filters: request?.filters,
         sorters: request?.sorters,
       )
-          .map((records) {
+          .map((dtoRecords) {
+        final records = dtoRecords.map(toDomain).toList();
         if (this is StatefulRepository) {
           (this as StatefulRepository).state = records;
         }

@@ -3,21 +3,23 @@ import 'package:clean_foundations/clean_foundations.dart';
 import 'package:rxdart/subjects.dart';
 
 /// Stateful Repository
-mixin StatefulRepository<ModelT extends Object> on Repository<ModelT> {
-  List<ModelT>? _state;
+mixin StatefulRepository<M extends Model> on Repository<M> {
+  List<Dto<M>>? _state;
 
-  final BehaviorSubject<List<ModelT>> _dataStreamController =
-      BehaviorSubject<List<ModelT>>.seeded(const []);
+  final BehaviorSubject<List<Dto<M>>> _dataStreamController =
+      BehaviorSubject<List<Dto<M>>>.seeded(const []);
 
   /// Watch cached records
-  Stream<List<ModelT>> records() => _dataStreamController.asBroadcastStream();
+  Stream<List<M>> records() => _dataStreamController
+      .asBroadcastStream()
+      .map((event) => event.map(toDomain).toList());
 
   /// Get cached data
-  List<ModelT>? get state => _state;
+  List<M>? get state => _state?.map(toDomain).toList();
 
   /// Cache data
-  set state(List<ModelT>? value) {
-    _state = value;
-    _dataStreamController.add(value ?? []);
+  set state(List<M>? value) {
+    _state = value?.map(fromDomain).toList();
+    _dataStreamController.add(_state ?? []);
   }
 }

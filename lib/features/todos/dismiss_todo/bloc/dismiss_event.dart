@@ -13,7 +13,7 @@ final class DismissedEvent extends DismissEvent {
   final Todo todo;
 
   @override
-  List<Object> get props => [todo.toMap];
+  List<Object> get props => [todo];
 }
 
 final class UndismissedEvent extends DismissEvent {
@@ -22,5 +22,5 @@ final class UndismissedEvent extends DismissEvent {
   final Todo todo;
 
   @override
-  List<Object> get props => [todo.toMap];
+  List<Object> get props => [todo];
 }
