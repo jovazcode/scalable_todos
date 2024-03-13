@@ -1,5 +1,4 @@
 import 'package:clean_foundations/clean_foundations.dart';
-
 import 'package:meta/meta.dart';
 
 part 'entity.dart';

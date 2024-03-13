@@ -7,9 +7,6 @@ abstract class TodosApi {
   /// {@macro todos_api}
   const TodosApi();
 
-  /// List all todos.
-  List<RawData> listAllTodos();
-
   /// Provides a [Stream] of all todos.
   Stream<List<RawData>> getTodos();
 

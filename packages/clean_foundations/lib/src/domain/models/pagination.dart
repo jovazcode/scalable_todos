@@ -53,7 +53,7 @@ final class PagePagination extends Pagination {
       (element) => json.containsKey(element),
       orElse: () => key,
     );
-    return int.tryParse(json[expectedKey] as String);
+    return int.tryParse(json[expectedKey] as String? ?? '');
   }
 
   /// Fetch records starting from [start] value index

@@ -54,15 +54,6 @@ class LocalStorageTodosApi extends TodosApi {
   }
 
   @override
-  List<RawData> listAllTodos() {
-    // Resend current data value
-    _todoStreamController.add(_todoStreamController.value);
-
-    // Return current data value
-    return _todoStreamController.value;
-  }
-
-  @override
   Stream<List<RawData>> getTodos() => _todoStreamController.asBroadcastStream();
 
   @override

@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   bloc: ^8.1.3
+  bloc_concurrency: ^0.2.4
   clean_foundations:
     path: packages/clean_foundations
   equatable: ^2.0.5

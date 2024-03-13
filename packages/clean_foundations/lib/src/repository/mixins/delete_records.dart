@@ -8,7 +8,9 @@ mixin DeleteRecords<M extends Model> on Repository<M> {
   ) async {
     try {
       final res = await dataSource.delete(records.map(fromDomain).toList());
-      return RepositorySuccess(res.convert<M>(toDomain));
+      return RepositorySuccess(
+        res.convert<M>((dto) => toDomain(dto as Dto<M>)),
+      );
     } on DataSourceException catch (e) {
       return switch (e) {
         DataException() => DataFailure(message: e.toString()),

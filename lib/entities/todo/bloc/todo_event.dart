@@ -8,7 +8,11 @@ sealed class TodoEvent extends Equatable {
 }
 
 final class TodoSubscriptionRequested extends TodoEvent {
-  const TodoSubscriptionRequested();
+  const TodoSubscriptionRequested({
+    this.filter = TodosFilter.all,
+  });
+
+  final TodosFilter filter;
 }
 
 class TodoSetCompletedRequested extends TodoEvent {

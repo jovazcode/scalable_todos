@@ -2,19 +2,11 @@ import 'package:clean_foundations/clean_foundations.dart';
 
 import 'package:todos_api/todos_api.dart';
 
-import 'package:todos_data/src/datasources/todos/todo_reader.dart';
-import 'package:todos_data/src/datasources/todos/todo_writer.dart';
 import 'package:todos_data/src/dto/dto.dart';
 
-import 'package:todos_domain/todos_domain.dart';
-
 /// DataSource
-class TodosDataSource extends DataSource<Todo, TodoDTO> {
-  TodosDataSource({required this.api})
-      : super(
-          reader: TodoDTOReader(),
-          writer: TodoDTOWriter(),
-        );
+class TodosDataSource extends DataSource {
+  TodosDataSource({required this.api}) : super();
 
   // [Todo]s API
   final TodosApi api;
@@ -25,7 +17,7 @@ class TodosDataSource extends DataSource<Todo, TodoDTO> {
   /// Create new [records].
   @override
   Future<ResultSet<TodoDTO>> create(
-    List<Dto<Todo>> records,
+    List<Dto> records,
   ) async {
     final todos = records.cast<TodoDTO>();
     try {
@@ -46,7 +38,7 @@ class TodosDataSource extends DataSource<Todo, TodoDTO> {
 
   /// Update given [records].
   @override
-  Future<ResultSet<TodoDTO>> update(List<Dto<Todo>> records) async {
+  Future<ResultSet<TodoDTO>> update(List<Dto> records) async {
     final todos = records.cast<TodoDTO>();
     try {
       final updated = <TodoDTO>[];
@@ -68,7 +60,7 @@ class TodosDataSource extends DataSource<Todo, TodoDTO> {
 
   /// Delete given [records].
   @override
-  Future<ResultSet<TodoDTO>> delete(List<Dto<Todo>> records) async {
+  Future<ResultSet<TodoDTO>> delete(List<Dto> records) async {
     final todos = records.cast<TodoDTO>();
     try {
       final deleted = <TodoDTO>[];
@@ -83,32 +75,6 @@ class TodosDataSource extends DataSource<Todo, TodoDTO> {
       return ResultSet(records: deleted);
     } on TodoNotFoundException catch (excp) {
       throw DataException(message: 'Todo not found', exception: excp);
-    } on Exception catch (excp) {
-      throw RemoteException(exception: excp);
-    }
-  }
-
-  /// Filter current 'records'.
-  @override
-  Future<ResultSet<TodoDTO>> filter({
-    required List<DataFilter<dynamic>> filters,
-  }) async {
-    // Update current filters
-    _filters
-      ..clear()
-      ..addAll(filters);
-
-    final dataList = api.listAllTodos();
-    final filteredDataList = _filters.isEmpty
-        ? dataList
-        : dataList.where(
-            (data) => !_filters.any((filter) => !data.matchFilter(filter)),
-          );
-
-    try {
-      final res =
-          filteredDataList.map((data) => TodoDTO.fromMap(data.toMap)).toList();
-      return ResultSet(records: res);
     } on Exception catch (excp) {
       throw RemoteException(exception: excp);
     }

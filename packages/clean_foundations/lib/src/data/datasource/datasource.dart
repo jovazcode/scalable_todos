@@ -3,37 +3,26 @@
 import 'package:clean_foundations/clean_foundations.dart';
 
 export 'exceptions.dart';
-export 'reader.dart';
-export 'writer.dart';
 
 /// A DataSource Definition
-abstract class DataSource<M extends Model, DTO extends Dto<M>> {
+abstract class DataSource {
   /// A DataSource Definition
-  DataSource({
-    this.reader,
-    this.writer,
-  });
-
-  /// Data reader
-  final DataReader<DTO>? reader;
-
-  /// Data writer
-  final DataWriter<DTO>? writer;
+  DataSource();
 
   /// Create new [records].
-  Future<ResultSet<Dto<M>>> create(List<Dto<M>> records) =>
+  Future<ResultSet<Dto>> create(List<Dto> records) =>
       throw UnimplementedError();
 
   /// Update given [records].
-  Future<ResultSet<Dto<M>>> update(List<Dto<M>> records) =>
+  Future<ResultSet<Dto>> update(List<Dto> records) =>
       throw UnimplementedError();
 
   /// Delete given [records].
-  Future<ResultSet<Dto<M>>> delete(List<Dto<M>> records) =>
+  Future<ResultSet<Dto>> delete(List<Dto> records) =>
       throw UnimplementedError();
 
   /// List all 'records'.
-  Future<ResultSet<Dto<M>>> list({
+  Future<ResultSet<Dto>> list({
     Pagination? pagination,
     List<DataFilter>? filters,
     List<DataSorter>? sorters,
@@ -41,13 +30,13 @@ abstract class DataSource<M extends Model, DTO extends Dto<M>> {
       throw UnimplementedError();
 
   /// Filter current 'records'.
-  Future<ResultSet<Dto<M>>> filter({
+  Future<ResultSet<Dto>> filter({
     required List<DataFilter> filters,
   }) =>
       throw UnimplementedError();
 
   /// Stream of records.
-  Stream<List<Dto<M>>> watch({
+  Stream<List<Dto>> watch({
     Pagination? pagination,
     List<DataFilter>? filters,
     List<DataSorter>? sorters,

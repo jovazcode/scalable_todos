@@ -18,4 +18,5 @@ export 'todo/todo.dart'
         TodoState,
         TodoStatus,
         TodoSubscriptionRequested,
-        TodoToggleAllRequested;
+        TodoToggleAllRequested,
+        TodosFilter;

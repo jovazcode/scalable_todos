@@ -13,7 +13,7 @@ abstract class Repository<M extends Model> {
   });
 
   /// The data source
-  final DataSource<M, Dto<M>> dataSource;
+  final DataSource dataSource;
 
   /// From domain
   Dto<M> fromDomain(M model);

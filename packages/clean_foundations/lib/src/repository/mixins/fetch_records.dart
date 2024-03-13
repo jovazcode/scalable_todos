@@ -1,7 +1,7 @@
 import 'package:clean_foundations/clean_foundations.dart';
 
-/// Repository can Load Records
-mixin LoadRecords<M extends Model> on Repository<M> {
+/// Repository can Fetch Records
+mixin FetchRecords<M extends Model> on Repository<M> {
   /// Load 'records'.
   Future<RepositoryResponse<ResultSet<M>>> load({
     RepositoryRequest? request,
@@ -23,7 +23,9 @@ mixin LoadRecords<M extends Model> on Repository<M> {
           repo.state = res.records.cast();
         }
       }
-      return RepositorySuccess(res.convert<M>(toDomain));
+      return RepositorySuccess(
+        res.convert<M>((dto) => toDomain(dto as Dto<M>)),
+      );
     } on DataSourceException catch (e) {
       return switch (e) {
         DataException() => DataFailure(message: e.toString()),

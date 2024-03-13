@@ -1,3 +1,4 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:clean_foundations/clean_foundations.dart';
 import 'package:equatable/equatable.dart';
 
@@ -11,7 +12,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     required TodosRepository todosRepository,
   })  : _todosRepository = todosRepository,
         super(const TodoState()) {
-    on<TodoSubscriptionRequested>(_onSubscriptionRequested);
+    on<TodoSubscriptionRequested>(
+      _onSubscriptionRequested,
+      // Allow only one event to ever be active at once, canceling
+      // any active subscription handler.
+      transformer: restartable(),
+    );
     on<TodoSetCompletedRequested>(_onSetCompletedRequested);
     on<TodoToggleAllRequested>(_onToggleAllRequested);
     on<TodoClearCompletedRequested>(_onClearCompletedRequested);
@@ -23,10 +29,25 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     TodoSubscriptionRequested event,
     Emitter<TodoState> emit,
   ) async {
-    emit(state.copyWith(status: () => TodoStatus.loading));
+    emit(
+      state.copyWith(
+        filter: () => event.filter,
+        status: () => TodoStatus.loading,
+      ),
+    );
+
+    final filters = <DataFilter<dynamic>>[];
+    if (event.filter != TodosFilter.all) {
+      filters.add(
+        DataFilter.equal(
+          'completed',
+          [event.filter == TodosFilter.completedOnly],
+        ),
+      );
+    }
 
     await emit.forEach<RepositoryResponse<List<Todo>>>(
-      _todosRepository.watch(),
+      _todosRepository.watch(request: RepositoryRequest({'filters': filters})),
       onData: (response) => state.copyWith(
         status: () => TodoStatus.success,
         todos: () => (response as RepositorySuccess<List<Todo>>).value,

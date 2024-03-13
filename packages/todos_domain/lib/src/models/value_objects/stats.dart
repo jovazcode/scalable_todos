@@ -1,15 +1,20 @@
 import 'package:clean_foundations/clean_foundations.dart';
 
 /// Stats (value object)
-class Stats extends Model {
+class Stats extends ValueObject {
   Stats({
-    required this.completedTodos,
-    required this.activeTodos,
-  });
+    int? completedTodos,
+    int? activeTodos,
+  }) : super.fromMap(
+          data: {
+            'completedTodos': completedTodos,
+            'activeTodos': activeTodos,
+          },
+        );
 
   /// The number of completed `todo`.
-  final int completedTodos;
+  int get completedTodos => get<int>('completedTodos') ?? 0;
 
   /// The number of active `todo`.
-  final int activeTodos;
+  int get activeTodos => get<int>('activeTodos') ?? 0;
 }

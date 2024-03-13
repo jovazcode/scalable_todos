@@ -18,10 +18,10 @@ mixin PaginatedRepository<M extends Model> on Repository<M> {
     Pagination? pagination, {
     bool addRecords = false,
   }) async {
-    if (this is! LoadRecords) {
+    if (this is! FetchRecords) {
       throw UnimplementedError();
     }
-    await (this as LoadRecords).load(
+    await (this as FetchRecords).load(
       request: RepositoryRequest({
         'pagination': pagination ?? this.pagination,
         'addRecords': addRecords,
