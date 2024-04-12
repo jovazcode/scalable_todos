@@ -147,10 +147,10 @@ packages:
     dependency: "direct main"
     description:
       name: get_it
-      sha256: d0b88dc35a7f97fd91fec0cf8f165abd97a57977968d8fc02ba0bc92e14ba07e
+      sha256: ae30b28cc73053f79fd46b15f430db16cae22a0554e6cd25333c840b310b0270
       url: "https://pub.dev"
     source: hosted
-    version: "7.6.6"
+    version: "7.6.9"
   go_router:
     dependency: "direct main"
     description:
