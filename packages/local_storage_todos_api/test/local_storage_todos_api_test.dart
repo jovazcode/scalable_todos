@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'dart:convert';
 
+import 'package:clean_foundations/clean_foundations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:local_storage_todos_api/local_storage_todos_api.dart';
 import 'package:mocktail/mocktail.dart';
@@ -13,21 +14,27 @@ void main() {
     late SharedPreferences plugin;
 
     final todos = [
-      TodoModelx(
-        id: '1',
-        title: 'title 1',
-        description: 'description 1',
+      RawData.fromMap(
+        data: const {
+          'id': '1',
+          'title': 'title 1',
+          'description': 'description 1',
+        },
       ),
-      TodoModelx(
-        id: '2',
-        title: 'title 2',
-        description: 'description 2',
+      RawData.fromMap(
+        data: const {
+          'id': '2',
+          'title': 'title 2',
+          'description': 'description 2',
+        },
       ),
-      TodoModelx(
-        id: '3',
-        title: 'title 3',
-        description: 'description 3',
-        isCompleted: true,
+      RawData.fromMap(
+        data: const {
+          'id': '3',
+          'title': 'title 3',
+          'description': 'description 3',
+          'completed': true,
+        },
       ),
     ];
 
@@ -68,7 +75,7 @@ void main() {
 
           final subject = createSubject();
 
-          expect(subject.getTodos(), emits(const <TodoModelx>[]));
+          expect(subject.getTodos(), emits(const <RawData>[]));
           verify(
             () => plugin.getString(
               LocalStorageTodosApi.kTodosCollectionKey,
@@ -87,10 +94,12 @@ void main() {
 
     group('saveTodo', () {
       test('saves new todos', () {
-        final newTodo = TodoModelx(
-          id: '4',
-          title: 'title 4',
-          description: 'description 4',
+        final newTodo = RawData.fromMap(
+          data: const {
+            'id': '4',
+            'title': 'title 4',
+            'description': 'description 4',
+          },
         );
 
         final newTodos = [...todos, newTodo];
@@ -109,11 +118,13 @@ void main() {
       });
 
       test('updates existing todos', () {
-        final updatedTodo = TodoModelx(
-          id: '1',
-          title: 'new title 1',
-          description: 'new description 1',
-          isCompleted: true,
+        final updatedTodo = RawData.fromMap(
+          data: const {
+            'id': '1',
+            'title': 'new title 1',
+            'description': 'new description 1',
+            'completed': true,
+          },
         );
         final newTodos = [updatedTodo, ...todos.sublist(1)];
 
@@ -137,7 +148,7 @@ void main() {
 
         final subject = createSubject();
 
-        expect(subject.deleteTodo(todos[0].id), completes);
+        expect(subject.deleteTodo(todos[0].get<String>('id')!), completes);
         expect(subject.getTodos(), emits(newTodos));
 
         verify(
@@ -164,7 +175,8 @@ void main() {
 
     group('clearCompleted', () {
       test('deletes all completed todos', () {
-        final newTodos = todos.where((todo) => !todo.isCompleted).toList();
+        final newTodos =
+            todos.where((todo) => !todo.get<bool>('completed')!).toList();
         final deletedTodosAmount = todos.length - newTodos.length;
 
         final subject = createSubject();
@@ -187,9 +199,9 @@ void main() {
     group('completeAll', () {
       test('sets isCompleted on all todos to provided value', () {
         final newTodos =
-            todos.map((todo) => todo.copyWith(isCompleted: true)).toList();
+            todos.map((todo) => todo.mergeWith({'completed': true})).toList();
         final changedTodosAmount =
-            todos.where((todo) => !todo.isCompleted).length;
+            todos.where((todo) => !todo.get<bool>('completed')!).length;
 
         final subject = createSubject();
 
