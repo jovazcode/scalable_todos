@@ -30,7 +30,7 @@ dependencies:
     path: packages/todos_domain
 
 dev_dependencies:
-  very_good_analysis: ^5.0.0
+  very_good_analysis: ^6.0.0
 
 flutter:
   uses-material-design: true
